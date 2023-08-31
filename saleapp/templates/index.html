@@ -1,0 +1,86 @@
+{% extends 'layout/base.html' %}
+{% block js %}
+<script>
+function change()
+    {
+        var o1 = document.getElementById("op1").value;
+	    var o2 = document.getElementById("op2").value;
+	    document.getElementById("op2").value = o1;
+	    document.getElementById("op1").value = o2;
+    }
+
+
+
+
+
+</script>
+{% endblock %}
+{% block content %}
+<form method="post" action="{{url_for('home')}}">
+    <div class="flight" style="display:flex; justify-content: center; margin-top: 2%">
+        <div style="width:25%; display:flex; align-items:center; ">
+            <p style="padding-right: 5%; margin-bottom: 0;">From</p>
+            <select class="form-select" aria-label="Default select example" id="op1" name="diem_di">
+                <option selected>Chọn điểm đi</option>
+                {% for t in ten_diem_di %}
+                <option value="{{t}}">{{t}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="padding: 0% 5%; margin-bottom: 0">
+            <a href="#" onclick="change()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+                </svg>
+            </a>
+        </div>
+        <div style="width:25%; display:flex; align-items:center; margin-left:10">
+            <p style="padding-right: 5%; margin-bottom: 0;">To</p>
+            <select class="form-select" aria-label="Default select example" id="op2" name="diem_den">
+                <option selected>Chọn điểm đến</option>
+                {% for t in ten_diem_den %}
+                <option value="{{t}}">{{t}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="padding: 0% 5%">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </div>
+    </div>
+</form>
+<br>
+<div class="row">
+    {% if tuyen_bay %}
+    <div class="col-md-3 col-sm-12" style="padding: 1rem;">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <h4 class="card-title">Tuyến bay</h4>
+                <p class="card-text">{{tuyen_bay.diem_di}} đến {{tuyen_bay.diem_den}}</p>
+                <a href="{{ url_for('chuyen_bay', tuyen_bay_id = tuyen_bay.id)}}" class="btn btn-primary">Tìm chuyến</a>
+            </div>
+            <img class="card-img-bottom"
+                 src="{{tuyen_bay.img}}"
+                 alt="Card image" style="width:100%">
+        </div>
+    </div>
+    {% endif %}
+    {% for t in tuyen %}
+    <div class="col-md-3 col-sm-12" style="padding: 1rem;">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <h4 class="card-title">Tuyến bay</h4>
+                <p class="card-text">{{t.diem_di}} đến {{t.diem_den}}</p>
+                <a href="{{ url_for('chuyen_bay', tuyen_bay_id = t.id)}}" class="btn btn-primary">Tìm chuyến</a>
+            </div>
+            <img class="card-img-bottom"
+                 src="{{t.img}}"
+                 alt="Card image" style="width:100%">
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

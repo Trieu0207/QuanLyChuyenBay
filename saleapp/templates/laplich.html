@@ -1,0 +1,205 @@
+{% extends 'layout/base.html' %}
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{url_for('static', filename='css/chuyenBays.css')}}" , rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div style="margin:auto; align-items:center justify-content:center">
+    <div class="text-bg-primary" style="text-align:center; padding: 1rem">
+        <p class="h1">Lập Lịch Chuyến Bay</p>
+    </div>
+
+    <br>
+    <br>
+    <form action="{{url_for('lap_lich_bay')}}" method="post" enctype="multipart/form-data">
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <button class="btn btn-outline-primary" type="submit">search</button>
+                <input type="text" class="form-control" id="chuyen" placeholder="Nhập mã chuyến bay"
+                       name="chuyen">
+            </div>
+        </div>
+        <br>
+        <div class=" col-md-8">
+            <div style="display:flex">
+                <div class=" col-md-6">
+                    <div class="form-floating mb-3 mt-3">
+                        {% if san_di %}
+                        <input type="text" class="form-control" readonly id="san_di" placeholder="Sân đi"
+                               name="san_di" value="{{san_di}}">
+                        <label for="san_di">Sân đi
+                            <pr class="text-danger">*</pr>
+                        </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class=" col-md-6">
+                    <div class="form-floating mb-3 mt-3">
+                        {% if san_den %}
+                        <input type="text" class="form-control" readonly id="san_den" placeholder="Sân đến"
+                               name="san_den" value="{{san_den}}">
+                        <label for="san_den">Sân đến
+                            <pr class="text-danger">*</pr>
+                        </label>
+                        {% endif%}
+                    </div>
+                </div>
+            </div>
+            {% if lich %}
+            <div class="col-md-8" style="display:flex">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" required id="san_di" placeholder="Sân đi"
+                           name="san_di" value="{{lich.id}}">
+                </div>
+                <div class="col-md-6">
+                    <label for="ghe">Sân đến</label>
+                    <select class="form-control" id="ghe" name="ghe">
+                        <option>Chu Lai</option>
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+            <div class="mb-3 mt-3" style="display:flex">
+                <div class="col-md-5">
+                    <label for="thoi_gian_khoi_hanh" class="text-primary">Thời gian khởi hành
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    <div class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative">
+                        <input type="datetime-local" class="form-control" id="thoi_gian_khoi_hanh"
+                               name="thoi_gian_khoi_hanh">
+                        <div class="thoi_gian_khoi_hanh" id="depart"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="thoi_gian_bay" class="text-primary">Thời gian bay (số phút)
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    <div class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative">
+                        <input type="number" min="30" required class="form-control" id="thoi_gian_bay"
+                               name="thoi_gian_bay">
+                        <div class="label" id="depart"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+             <div class="mb-3 mt-3" style="display:flex">
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="number" class="form-control" id="ghe_loai_1" name="ghe_loai_1" >
+                        <label for="ghe_loai_1">Ghế loại 1 </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="number" class="form-control" id="ghe_loai_2" name="ghe_loai_2" >
+                        <label for="ghe_loai_2">Ghế loại 2 </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mb-3 mt-3" style="display:flex">
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="number" class="form-control" id="gia_1" name="gia_1" >
+                        <label for="gia_1">Giá ghế loại 1 </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="number" class="form-control" id="gia_2" name="gia_2" >
+                        <label for="gia_2">Giá ghế loại 2 </label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            {% if chuyen %}
+             <div class="mb-3 mt-3" style="display:flex">
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="san_tg_1" name="san_tg_1" >
+                        <label for="san_tg_1">Sân trung gian 1 </label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="ghi_chu" name="ghi_chu_1" >
+                        <label for="ghi_chu_1">Ghi chú</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="san_tg_2" name="san_tg_2">
+                        <label for="san_tg_2">Sân trung gian 2 </label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="number" class="form-control" id="ghi_chu_2" name="ghi_chu_2">
+                        <label for="ghi_chu_2">Ghi chú</label>
+                    </div>
+                </div>
+
+            </div>
+            {% else %}
+              <div class="mb-3 mt-3" style="display:flex">
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="san_tg_1" name="san_tg_1" readonly>
+                        <label for="san_tg_1">Sân trung gian 1 </label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="ghi_chu" name="ghi_chu_1" readonly>
+                        <label for="ghi_chu_1">Ghi chú</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="san_tg_2" name="san_tg_2" readonly>
+                        <label for="san_tg_2">Sân trung gian 2 </label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="number" class="form-control" id="ghi_chu_2" name="ghi_chu_2" readonly>
+                        <label for="ghi_chu_2">Ghi chú</label>
+                    </div>
+                </div>
+
+            </div>
+            {% endif %}
+            <div class="display">
+                <button type="submit" class="btn btn-success">Submit</button>
+                <a type="button" class="btn btn-danger" href="{{url_for('thanh_toan')}}">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

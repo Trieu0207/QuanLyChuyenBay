@@ -1,0 +1,121 @@
+{% extends 'layout/base.html' %}
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{url_for('static', filename='css/chuyenBays.css')}}" , rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+{% if not id_hoa_don %}
+<div class="alert alert-primary">
+    <p>Bạn chưa có hóa đơn chưa thanh toán</p>
+<div>
+    <a href="{{ url_for('home')}}">
+        <button class="btn btn-danger"> Quay về trang chủ</button>
+    </a>
+</div>
+</div>
+{% endif %}
+{% if success %}
+<div class="alert alert-success">
+    {{success}}
+</div>
+{% endif %}
+{% if err_mess %}
+<div class="alert alert-danger">
+    {{err_mess}}
+</div>
+{% endif %}
+
+{% if ds_ve %}
+<div>
+    <form action="{{url_for('xac_nhan_thanh_toan')}}" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Mã ghế</th>
+                <th>Tên hành khách</th>
+                <th>Giá tiền</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for d in ds_ve %}
+            <tr>
+                <td>{{d.ghe_id}}</td>
+                <td>{{d.ten}}</td>
+                <td>{{"{:,.00f}".format(d.gia_tien)}}</td>
+                <td>
+                    <button value="{{d.id}}" class="form-control btn btn-primary btn-block" id="ve_id" name="ve_id">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path fill-rule="evenodd"
+                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><p class="text-danger h5">Tổng Thanh Toán:</p></td>
+                <td></td>
+                <td class="text-danger h5">{{"{:,.00f}".format(tong_tien)}}</td>
+                <td>
+                    <!-- Button to Open the Modal -->
+                    <form action="{{url_for('xac_nhan_thanh_toan')}}" method="post">
+                        <button type="button"
+                                class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
+                            Thanh Toán
+                        </button>
+                        <div class="modal" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Modal Heading</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        Modal body..
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class=" btn btn-danger" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" value="id_hoa_don" name="submit" id="submit"
+                                                class="btn btn-success" data-bs-dismiss="modal">Xác Nhận
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- The Modal -->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<h1>hello world</h1>
+{% endif %}
+{% endblock %}

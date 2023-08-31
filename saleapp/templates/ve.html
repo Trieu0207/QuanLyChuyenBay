@@ -1,0 +1,226 @@
+{% extends 'layout/base.html' %}
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{url_for('static', filename='css/chuyenBays.css')}}" , rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    function add_class(){
+	    document.getElementById("item").classList.add("bg-warning")
+    }
+    function remove_class(){
+	    document.getElementById("item").classList.remove("bg-warning")
+    }
+    function not_load(){
+
+        event.preventDefault()
+    }
+    function is_tre_em(){
+        let a = Number(document.getElementById("birth_day").value.slice(0,4))
+        let temp = new Date().getFullYear()
+        b = Number(temp)
+        c = b - a
+        if (b - a<= 15){
+                document.getElementById("cccd").value = "Trẻ em";
+                document.getElementById("cccd").readOnly = true;
+            }
+        if (b - a > 15){
+            document.getElementById("cccd").value = "";
+            document.getElementById('cccd').readOnly = false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}
+{% block content %}
+<br>
+<div class="h1 text-bg-dark" style="padding:1rem; text-align:center">
+    <label class="h1">Xem chỗ ngồi</label>
+</div>
+<br>
+<div style="display:flex">
+    <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#demo">
+            Đặt vé
+        </button>
+        <div id="demo" class="collapse" style="align-items:center">
+            <br>
+            <form action="{{url_for('info_ve')}}" method="post" enctype="multipart/form-data">
+                <!--tên-->
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên" name="name">
+                    <label for="name">Nhập họ và tên</label>
+                </div>
+
+                <!--ngay sinh-->
+                <div class="form-floating mb-3 mt-3">
+                    <label for="birth_day" class="text-primary">Ngày sinh
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    <div class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative">
+                        <input type="date" required class="form-control" id="birth_day" onchange="is_tre_em()"
+                               name="birth_day">
+                        <div class="label" id="depart"></div>
+                    </div>
+                </div>
+
+
+                <!-- số cccd-->
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" maxlength="11" class="form-control" id="cccd" name="cccd"
+                           placeholder="Số CCCD" required>
+                    <label for="cccd">Số CCCD
+                        <pr class="text-danger">*</pr>
+                    </label>
+                </div>
+
+
+                <div class="mb-3 mt-3" style="display:flex">
+
+
+                    <!--chuyen bay-->
+                    <div class="col-md-6">
+                        <label for="chuyen">Mã chuyến bay</label>
+                        <input type="text" maxlength="11" class="form-control" id="chuyen" name="chuyen"
+                               placeholder="chuyen" value="{{chuyen.id}}" readonly>
+                    </div>
+                    <!--chọn chỗ ngồi-->
+                    <div class="col-md-6">
+                        <label for="ghe">chọn vị trí ngồi</label>
+                        <select class="form-control" id="ghe" name="ghe">
+                            <option></option>
+                            {% for i in ghe_chua_dat %}
+                            <option value="{{i.id}}">{{i}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="form-floating mb-3 mt-3" style="display:flex">
+
+                    <div>
+                        <label for="lich_bay_id">Thời gian khởi hành: {{lich_bay.thoi_gian_khoi_hanh}}</label>
+                        <input type="text" class="form-control" id="lich_bay_id"
+                               name="lich_bay_id"
+                               placeholder="lich_bay_id" value="{{lich_bay.id}}" readonly>
+                    </div>
+                </div>
+
+                {% if not current_user.is_authenticated %}
+                <button class="btn btn-success" onclick="not_load()">Submit</button>
+                <br>
+                <br>
+                <p class="text-danger">*Yêu cầu đăng nhập trước khi submit</p>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <div class="display">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <a type="button" class="btn btn-danger" href="{{url_for('thanh_toan', lich_bay_id = lich_bay_id)}}">Thanh toán ngay</a>
+                </div>
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+    <div id="demo" class="collapse col-md-5 " style="align-items:center; text-align:center; justify-content:center">
+        <br>
+        <p class="h2 text-bg-warning">Lưu ý khi đặt vé</p>
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <td class="text-bg-dark">Vé đã được đặt</td>
+                <td>bạn không thể đặt những vé này</td>
+            </tr>
+            <tr>
+                <td>Vé Thường</td>
+                <td>giá vé:  {{ "{:,.000f}".format(gia_ve_normal) }}VNĐ</td>
+            </tr>
+            <tr>
+                <td class="text-danger">Vé vip</td>
+                <td class="text-danger">giá vé: {{ "{:,.000f}".format(gia_ve_vip) }}VNĐ</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<br>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th style="text-align:center">Dãy ngoài</th>
+            <th style="text-align:center">Dãy giữa</th>
+            <th style="text-align:center">Dãy trong</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in table_ghe %}
+        <tr>
+            {% for i in item %}
+            {% if i.id in ds_ve %}
+            <td style="text-align:center" class="text-bg-dark" id="{{i.ten_ghe}}">{{i}}</td>
+            {% else %}
+            {% if i.loai_ghe.__eq__("2") %}
+            <td style="text-align:center" class="text-danger" id="{{i.ten_ghe}}">{{i}}</td>
+            {% endif %}
+            {% if i.loai_ghe.__eq__("1") %}
+            <td style="text-align:center" id="{{i.ten_ghe}}">{{i}}</td>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'layout/base.html' %}
+
+{% block js %}
+<script>
+   function check_pass(){
+	var pass = document.getElementById("pass").value;
+	var re_pass = document.getElementById("re_pass").value;
+	if(pass == re_pass){
+		document.getElementById("feedback").style.visibility = "hidden";
+		return true;
+	}
+	else document.getElementById("feedback").style.visibility = "visible";
+	return false;
+    }
+    function see_Repass(){
+        const temp = document.getElementById("re_pass").getAttribute('type');
+        document.getElementById("re_pass").setAttribute('type', temp === 'password' ? 'text': 'password');
+    }
+    function see_pass(){
+        const temp = document.getElementById("pass").getAttribute('type');
+        document.getElementById("pass").setAttribute('type', temp === 'password' ? 'text': 'password');
+    }
+
+    function hidden_ex(){
+    document.getElementById("ex").innerHTML = null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}
+{% block content %}
+{% if ex %}
+<div class="alert alert-danger">
+    {{ ex }}
+</div>
+{% endif %}
+ <div id="register" class="col-md-8" style="margin:auto">
+     <div class="h1 text-bg-dark" style="padding:1rem; text-align:center">Register</div>
+            <br>
+            <form onsubmit="return check_pass()"  method="post" enctype="multipart/form-data"
+                  action="{{url_for('user_register')}}"
+                  style="justify-content: center;align-items=center">
+
+
+                <!--nhập name-->
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" class="form-control" required id="first_name"  placeholder="Nhập họ tên"
+                           name="first_name">
+                    <label for="first_name">Họ tên
+                        <pr class="text-danger">*</pr>
+                    </label>
+
+                </div>
+                <!--nhập ngày sinh-->
+                <div class="mb-3 mt-3">
+                    <label for="birth_day" class="text-primary">Ngày sinh
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    <div class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative">
+                        <input type="date" required class="form-control" id="birth_day"
+                               name="birth_day">
+                        <div class="label" id="depart"></div>
+                    </div>
+
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input type="email" class="form-control" required id="email" name="email" placeholder="Nhập Email">
+                    <label for="email">Email
+                        <pr class="text-danger">*</pr>
+                    </label>
+                </div>
+
+
+                <!--nhập số điện thoại-->
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" maxlength="11" class="form-control" id="sdt" name="sdt"
+                           placeholder="Nhập Số Điện Thoại" required>
+                    <label for="sdt">Số Điện Thoại
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    {% if ex and ex == "số điện thoại không hợp lệ" %}
+                    <p class="text-danger" id="ex">{{ex}}</p>
+                    {% endif %}
+                </div>
+
+
+                <!--nhập tên đăng nhập-->
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" class="form-control" id="user_name" name="user_name"
+                           placeholder="Nhập Tên Đăng nhập"
+                           required onclick="hidden_ex()">
+                    <label for="user_name">Tên đăng nhập
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    {% if ex and ex == "tên đăng nhập đã tồn tại" %}
+                    <p class="text-danger" id="ex">{{ex}}</p>
+                    {% endif %}
+                </div>
+
+
+                <!--nhập password-->
+                <div class="form-floating input-group mb-3 mt-3">
+                    <input type="password" class="form-control" id="pass" name="pass" placeholder="Nhập Mật Khẩu"
+                           required onclick="hidden_ex()">
+                    <label for="pass">Mật Khẩu
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    <button class="btn btn-light" type="button" onclick="see_pass()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-eye" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div>
+                    {% if ex == "mật khẩu không hợp lệ"%}
+                    <p id="warning" class="text-danger">
+                        Mật khẩu phải nhiều hơn 8 kí tự, có chữ hoa, số và kí tự đặt biệt </p>
+                    {% endif %}
+                </div>
+
+
+                <!--nhập xác nhận password-->
+                <div class="form-floating input-group mb-3 mt-3">
+
+                    <input type="password" class="form-control" id="re_pass" name="re_pass"
+                           placeholder="Xác Nhận Nhập Mật Khẩu"
+                           required>
+                    <label for="re_pass">Xác Nhận Mật Khẩu
+                        <pr class="text-danger">*</pr>
+                    </label>
+                    <button class="btn btn-light" type="button" onclick="see_Repass()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-eye" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <p id="feedback" style="visibility:hidden;" class="text-danger">Mật khẩu không giống nhau.</p>
+
+
+                <!--nhập đường dẫn ảnh-->
+                <div class="form-floating mb-3 mt-3">
+                    <input type="file" accept="image/png" class="form-control-file border" id="avatar" name="avatar"
+                           placeholder="chọn ảnh avatar">
+                </div>
+
+
+                <!--nhập submit button-->
+                <div>
+                    <input type="submit" value="Đăng ký" class="btn btn-danger"/>
+                </div>
+
+            </form>
+        </div>
+
+{% endblock %}
